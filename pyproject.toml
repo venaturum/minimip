@@ -1,0 +1,54 @@
+# Poetry pyproject.toml: https://python-poetry.org/docs/pyproject/
+
+[build-system]
+requires = ["poetry>=1.0"]
+build-backend = "poetry.masonry.api"
+
+[tool.poetry]
+name = "minimip"
+version = "0.1.0"
+description = "Mini MIP solver"
+authors = ["Riley Clement <venaturum@gmail.com>"]
+maintainers = ["Riley Clement <venaturum@gmail.com>"]
+license = "MIT"
+repository = ""
+homepage = ""
+
+[tool.poetry.dependencies]
+python = "^3.8"
+pandas = "^1"
+numpy = "^1.23"
+
+
+
+[tool.poetry.dev-dependencies]
+ipykernel = "^6"
+isort = ">=5.8"
+black = ">=22"
+flake8 = ">=3.9"
+mypy = "^0.982"
+
+
+[tool.isort]
+# make it compatible with black
+profile = "black"
+multi_line_output = 3
+src_paths = ["src/minimip"]
+
+
+[tool.mypy]
+# disallow_untyped_defs='true'
+# disallow_incomplete_defs='true'
+# no_implicit_optional='true'
+namespace_packages='true'
+exclude = [
+    '^docs/.',
+	'^tests/.',
+]
+
+[[tool.mypy.overrides]]
+module=[
+    'matplotlib.*',
+    'pandas.*',
+]
+ignore_missing_imports='true'
