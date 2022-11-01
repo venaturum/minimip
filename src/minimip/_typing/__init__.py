@@ -1,4 +1,4 @@
-from typing import Collection, Iterable, List, Union
+from typing import Collection, Dict, Iterable, List, Union
 
 from minimip._constants import ConstraintSense, ObjectiveSense
 from minimip._typing.protocols import Constraint, Linker, Problem, Variable
