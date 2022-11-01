@@ -1,6 +1,6 @@
-from minimip._constants import ConstraintSense
+from minimip._constants import ConstraintSense, ObjectiveSense
 from minimip._typing import Constraint as ConstraintType
-from minimip._typing import Linker, List, PythonScalar
+from minimip._typing import Linker, List, PythonScalar, Union
 from minimip._typing import Variable as VariableType
 from minimip.problem.constraint import Constraint
 from minimip.problem.linker import SimpleLinker
@@ -13,6 +13,17 @@ class Problem:
         self._linker: Linker = linker
         self._constraints: List[ConstraintType] = []
         self._variables: List[VariableType] = []
+        self._sense: ObjectiveSense = ObjectiveSense.MIN
+        self._obj_constant: PythonScalar = 0
+
+    def set_sense(self, sense: Union[str, ObjectiveSense]):
+        if isinstance(sense, str):
+            sense = ObjectiveSense[sense.upper()]
+        self._sense = sense
+
+    @property
+    def sense(self):
+        return self._sense
 
     @property
     def constraints(self):
@@ -32,6 +43,9 @@ class Problem:
         self._constraints.append(result)
         return result
 
+    def set_objective_constant(self, constant: PythonScalar):
+        self._obj_constant = constant
+
     def add_variable_to_constraint(
         self,
         variable: VariableType,
@@ -39,6 +53,13 @@ class Problem:
         coefficient: PythonScalar,
     ):
         self._linker.add_variable_to_constraint(variable, constraint, coefficient)
+
+    def add_variable_to_objective(
+        self,
+        variable: VariableType,
+        coefficient: PythonScalar,
+    ):
+        self._linker.add_variable_to_objective(variable, coefficient)
 
     def make_matrix(self):
         return self._linker.make_matrix(self.variables, self.constraints)

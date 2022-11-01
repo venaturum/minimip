@@ -12,6 +12,8 @@ class SimpleLinker:
         self._variables: List = []
         self._constraints: List = []
         self._coefficients: List = []
+        self._obj_variables: List = []
+        self._obj_coefficients: List = []
 
     def add_variable_to_constraint(
         self,
@@ -32,3 +34,9 @@ class SimpleLinker:
         A = np.zeros((len(constraints), len(variables)))
         A[cons_coords, var_coords] = self._coefficients
         return A
+
+    def add_variable_to_objective(
+        self, variable: VariableType, coefficient: PythonScalar
+    ):
+        self._obj_variables.append(variable)
+        self._obj_coefficients.append(coefficient)

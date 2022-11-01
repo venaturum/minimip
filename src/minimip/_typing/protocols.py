@@ -28,6 +28,12 @@ class Problem(Protocol):
     ):
         ...
 
+    def add_variable_to_objective(self, variable: Variable, coefficient: PythonScalar):
+        ...
+
+    def set_objective_constant(self, constant: PythonScalar):
+        ...
+
 
 class Constraint(Protocol):
     def __init__(self, problem: Problem, sense: ConstraintSense, RHS: PythonScalar):
@@ -57,4 +63,7 @@ class Linker(Protocol):
         ...
 
     def make_matrix(self, variables: Collection, constraints: Collection) -> np.ndarray:
+        ...
+
+    def add_variable_to_objective(self, variable: Variable, coefficient: PythonScalar):
         ...
