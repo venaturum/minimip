@@ -1,10 +1,10 @@
-from minimip._typing import Constraint, Problem
-from minimip._typing.types import PythonScalar
+from minimip._typing import Constraint, Problem, PythonScalar
 
 
 class Variable:
-    def __init__(self, problem: Problem):
+    def __init__(self, problem: Problem, name: str):
         self._problem = problem
+        self._name = name
 
     @property
     def problem(self) -> Problem:

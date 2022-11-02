@@ -1,6 +1,6 @@
 from minimip._constants import ConstraintSense, ObjectiveSense
 from minimip._typing import Constraint as ConstraintType
-from minimip._typing import Linker, List, PythonScalar, Union
+from minimip._typing import Iterable, Linker, List, PythonScalar, Union
 from minimip._typing import Variable as VariableType
 from minimip.problem.constraint import Constraint
 from minimip.problem.linker import SimpleLinker
@@ -26,20 +26,25 @@ class Problem:
         return self._sense
 
     @property
-    def constraints(self):
+    def constraints(self) -> Iterable[ConstraintType]:
         return self._constraints
 
     @property
-    def variables(self):
+    def variables(self) -> Iterable[VariableType]:
         return self._variables
 
-    def make_variable(self):
-        result = Variable(self)
+    def make_variable(self, name: str) -> VariableType:
+        result = Variable(self, name)
         self._variables.append(result)
         return result
 
-    def make_constraint(self, sense: ConstraintSense, RHS: PythonScalar):
-        result = Constraint(self, sense, RHS)
+    def make_constraint(
+        self,
+        sense: ConstraintSense,
+        RHS: PythonScalar,
+        name: str = "",
+    ) -> ConstraintType:
+        result = Constraint(self, sense, RHS, name)
         self._constraints.append(result)
         return result
 

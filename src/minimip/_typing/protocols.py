@@ -10,17 +10,19 @@ from minimip._typing.types import PythonScalar
 
 class Problem(Protocol):
     @property
-    def constraints(self):
+    def constraints(self) -> Iterable[Constraint]:
         ...
 
     @property
-    def variables(self):
+    def variables(self) -> Iterable[Variable]:
         ...
 
-    def make_variable(self):
+    def make_variable(self, name: str) -> Variable:
         ...
 
-    def make_constraint(self, sense: ConstraintSense, RHS: PythonScalar):
+    def make_constraint(
+        self, sense: ConstraintSense, RHS: PythonScalar, name: str = ""
+    ) -> Constraint:
         ...
 
     def add_variable_to_constraint(
@@ -36,7 +38,9 @@ class Problem(Protocol):
 
 
 class Constraint(Protocol):
-    def __init__(self, problem: Problem, sense: ConstraintSense, RHS: PythonScalar):
+    def __init__(
+        self, problem: Problem, sense: ConstraintSense, RHS: PythonScalar, name: str
+    ):
         ...
 
     @property
@@ -48,6 +52,9 @@ class Constraint(Protocol):
 
 
 class Variable(Protocol):
+    def __init__(self, problem: Problem, name: str):
+        ...
+
     @property
     def problem(self) -> Problem:
         ...

@@ -4,10 +4,17 @@ from minimip._typing.types import PythonScalar
 
 
 class Constraint:
-    def __init__(self, problem: Problem, sense: ConstraintSense, RHS: PythonScalar):
+    def __init__(
+        self,
+        problem: Problem,
+        sense: ConstraintSense,
+        RHS: PythonScalar,
+        name: str = "",
+    ):
         self._problem = problem
         self._sense = sense
         self._RHS = RHS
+        self._name = ""
 
     @property
     def problem(self) -> Problem:

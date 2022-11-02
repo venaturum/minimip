@@ -8,7 +8,6 @@ from minimip._typing import Problem as ProblemType
 from minimip._typing import PythonScalar, Variable
 from minimip.problem.problem import Problem
 
-regex = "([\+|-]?)((?:\d+(?:\.\d+)?)?)([a-z0-9_]*)"
 CONST = "CONST"
 
 
@@ -31,6 +30,7 @@ def _map_symbol_to_coeff(sign, unsigned_coeff, symbol):
 
 
 def _make_symbol_dict_from_expression(expr):
+    regex = "([\+|-]?)((?:\d+(?:\.\d+)?)?)([a-z0-9_]*)"
     expr = expr.replace(" ", "")
     return dict(
         [_map_symbol_to_coeff(*t) for t in re.findall(regex, expr) if t != ("", "", "")]
@@ -52,12 +52,12 @@ class RsslReader:
         self._name_to_variable_map: Dict = {}
 
     @property
-    def problem(self):
+    def problem(self) -> ProblemType:
         return self._problem
 
     def _get_var_from_name(self, name) -> Variable:
         if name not in self._name_to_variable_map:
-            self._name_to_variable_map[name] = self.problem.make_variable()
+            self._name_to_variable_map[name] = self.problem.make_variable(name)
         return self._name_to_variable_map[name]
 
     def handle_objective(self, string: str):
@@ -85,7 +85,6 @@ class RsslReader:
 
 def make_problem(string: str) -> ProblemType:
     obj, *constraints = string.strip("\n").split("\n")
-    # prob.set_string_objective(obj)
     reader = RsslReader()
     reader.handle_objective(obj)
     for constraint in constraints:
