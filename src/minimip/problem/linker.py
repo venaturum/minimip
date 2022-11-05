@@ -26,7 +26,9 @@ class SimpleLinker:
         self._constraints.append(constraint)
         self._coefficients.append(coefficient)
 
-    def make_matrix(self, variables: Collection, constraints: Collection) -> np.ndarray:
+    def make_coefficient_matrix(
+        self, variables: Collection, constraints: Collection
+    ) -> np.ndarray:
         var_map = {v: k for k, v in enumerate(variables)}
         con_map = {v: k for k, v in enumerate(constraints)}
         var_coords = tuple(map(var_map.get, self._variables))
@@ -40,3 +42,10 @@ class SimpleLinker:
     ):
         self._obj_variables.append(variable)
         self._obj_coefficients.append(coefficient)
+
+    def make_objective_vector(self, variables: Collection) -> np.ndarray:
+        var_map = {v: k for k, v in enumerate(variables)}
+        var_coords = tuple(map(var_map.get, self._obj_variables))
+        c = np.zeros(len(variables))
+        c[var_coords] = self._obj_coefficients
+        return c

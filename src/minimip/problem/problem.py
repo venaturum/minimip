@@ -1,6 +1,10 @@
+from dataclasses import dataclass
+
+import numpy as np
+
 from minimip._constants import ConstraintSense, ObjectiveSense
 from minimip._typing import Constraint as ConstraintType
-from minimip._typing import Iterable, Linker, List, PythonScalar, Union
+from minimip._typing import Iterable, Linker, List, NDArray, PythonScalar, Union
 from minimip._typing import Variable as VariableType
 from minimip.problem.constraint import Constraint
 from minimip.problem.linker import SimpleLinker
@@ -66,5 +70,29 @@ class Problem:
     ):
         self._linker.add_variable_to_objective(variable, coefficient)
 
-    def make_matrix(self):
-        return self._linker.make_matrix(self.variables, self.constraints)
+    # def make_coefficient_matrix(self):
+    #     return self._linker.make_matrix(self.variables, self.constraints)
+
+    def _to_matrix_problem(self):
+        return MatrixProblem(
+            sense=self.sense,
+            c=self._linker.make_objective_vector(self.variables),
+            A=self._linker.make_coefficient_matrix(self.variables, self.constraints),
+            relation=np.array([c.sense.value for c in self.constraints]),
+            b=np.array([c.RHS for c in self.constraints]),
+        )
+
+
+@dataclass
+class MatrixProblem:
+    """
+    Representing a problem in the form
+    max/min  c^Tx
+    s.t.   Ax <= b
+    """
+
+    sense: ObjectiveSense
+    c: NDArray[np.float_]
+    A: NDArray[np.float_]
+    relation: NDArray[np.int_]
+    b: NDArray[np.float_]

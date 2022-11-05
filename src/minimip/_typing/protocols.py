@@ -69,8 +69,13 @@ class Linker(Protocol):
     ):
         ...
 
-    def make_matrix(self, variables: Collection, constraints: Collection) -> np.ndarray:
+    def make_coefficient_matrix(
+        self, variables: Collection, constraints: Collection
+    ) -> np.ndarray:
         ...
 
     def add_variable_to_objective(self, variable: Variable, coefficient: PythonScalar):
+        ...
+
+    def make_objective_vector(self, variables: Collection) -> np.ndarray:
         ...
